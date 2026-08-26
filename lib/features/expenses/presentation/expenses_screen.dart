@@ -64,8 +64,9 @@ class _ExpensesBody extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   formatMoney(context, summary.total),
-                  style: Theme.of(context).textTheme.headlineMedium
-                      ?.copyWith(fontWeight: FontWeight.w800),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ],
             ),

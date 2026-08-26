@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String formatNumber(BuildContext context, num value) =>
-    NumberFormat.decimalPattern(Localizations.localeOf(context).toString())
-        .format(value);
+    NumberFormat.decimalPattern(
+      Localizations.localeOf(context).toString(),
+    ).format(value);
 
 String formatMileage(BuildContext context, int mileage) =>
     '${formatNumber(context, mileage)} '

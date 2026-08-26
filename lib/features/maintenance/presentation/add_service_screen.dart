@@ -135,8 +135,9 @@ class _AddServiceFormState extends ConsumerState<_AddServiceForm> {
           const SizedBox(height: 24),
           Text(
             context.l10n.text('whatWasDone'),
-            style: Theme.of(context).textTheme.titleMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 10),
           Wrap(
@@ -193,8 +194,9 @@ class _AddServiceFormState extends ConsumerState<_AddServiceForm> {
           const SizedBox(height: 24),
           Text(
             context.l10n.text('nextInterval'),
-            style: Theme.of(context).textTheme.titleMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 10),
           Row(

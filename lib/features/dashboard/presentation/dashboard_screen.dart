@@ -117,15 +117,17 @@ class _VehicleHeader extends StatelessWidget {
               children: [
                 Text(
                   vehicle.displayName,
-                  style: Theme.of(context).textTheme.titleLarge
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 Text('${vehicle.year}'),
                 const SizedBox(height: 8),
                 Text(
                   formatMileage(context, vehicle.currentMileage),
-                  style: Theme.of(context).textTheme.headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ),
