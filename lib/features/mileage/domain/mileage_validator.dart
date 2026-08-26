@@ -10,4 +10,3 @@ abstract final class MileageValidator {
     return MileageValidation.valid;
   }
 }
-

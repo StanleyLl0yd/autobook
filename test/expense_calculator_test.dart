@@ -23,16 +23,14 @@ ServiceEvent _event(
   ServiceCategory category,
   DateTime date,
   int cost,
-) =>
-    ServiceEvent(
-      id: id,
-      vehicleId: 'vehicle-1',
-      category: category,
-      date: date,
-      mileage: 100000,
-      totalCost: cost,
-      currency: 'RUB',
-      createdAt: date,
-      items: const [],
-    );
-
+) => ServiceEvent(
+  id: id,
+  vehicleId: 'vehicle-1',
+  category: category,
+  date: date,
+  mileage: 100000,
+  totalCost: cost,
+  currency: 'RUB',
+  createdAt: date,
+  items: const [],
+);

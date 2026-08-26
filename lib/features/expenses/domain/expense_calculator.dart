@@ -1,10 +1,7 @@
 import 'package:autobook/features/maintenance/domain/models.dart';
 
 class ExpenseSummary {
-  const ExpenseSummary({
-    required this.year,
-    required this.byCategory,
-  });
+  const ExpenseSummary({required this.year, required this.byCategory});
 
   final int year;
   final Map<ServiceCategory, int> byCategory;
@@ -13,10 +10,7 @@ class ExpenseSummary {
 }
 
 abstract final class ExpenseCalculator {
-  static ExpenseSummary forYear(
-    Iterable<ServiceEvent> events,
-    int year,
-  ) {
+  static ExpenseSummary forYear(Iterable<ServiceEvent> events, int year) {
     final totals = <ServiceCategory, int>{};
     for (final event in events.where((event) => event.date.year == year)) {
       totals.update(
@@ -28,4 +22,3 @@ abstract final class ExpenseCalculator {
     return ExpenseSummary(year: year, byCategory: totals);
   }
 }
-

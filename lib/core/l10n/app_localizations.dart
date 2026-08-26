@@ -30,14 +30,13 @@ class AppLocalizations {
   }
 
   static Future<AppLocalizations> load(Locale locale) async {
-    final languageCode = supportedLocales.any(
-      (supported) => supported.languageCode == locale.languageCode,
-    )
+    final languageCode =
+        supportedLocales.any(
+          (supported) => supported.languageCode == locale.languageCode,
+        )
         ? locale.languageCode
         : 'en';
-    final raw = await rootBundle.loadString(
-      'lib/l10n/app_$languageCode.arb',
-    );
+    final raw = await rootBundle.loadString('lib/l10n/app_$languageCode.arb');
     final json = jsonDecode(raw) as Map<String, dynamic>;
     final values = <String, String>{};
     for (final entry in json.entries) {
@@ -55,8 +54,8 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) => AppLocalizations.supportedLocales.any(
-        (supported) => supported.languageCode == locale.languageCode,
-      );
+    (supported) => supported.languageCode == locale.languageCode,
+  );
 
   @override
   Future<AppLocalizations> load(Locale locale) => AppLocalizations.load(locale);
@@ -68,4 +67,3 @@ class _AppLocalizationsDelegate
 extension AppLocalizationsBuildContext on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 }
-

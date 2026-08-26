@@ -41,4 +41,3 @@ class AutoBookApp extends ConsumerWidget {
     );
   }
 }
-

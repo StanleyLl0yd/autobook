@@ -23,9 +23,9 @@ class AppDatabase extends GeneratedDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (migrator) async {
-          await customStatement('PRAGMA foreign_keys = ON');
-          await customStatement('''
+    onCreate: (migrator) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+      await customStatement('''
             CREATE TABLE vehicles (
               id TEXT PRIMARY KEY NOT NULL,
               brand TEXT NOT NULL,
@@ -37,7 +37,7 @@ class AppDatabase extends GeneratedDatabase {
               updated_at INTEGER NOT NULL
             )
           ''');
-          await customStatement('''
+      await customStatement('''
             CREATE TABLE mileage_records (
               id TEXT PRIMARY KEY NOT NULL,
               vehicle_id TEXT NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
@@ -45,7 +45,7 @@ class AppDatabase extends GeneratedDatabase {
               recorded_at INTEGER NOT NULL
             )
           ''');
-          await customStatement('''
+      await customStatement('''
             CREATE TABLE service_events (
               id TEXT PRIMARY KEY NOT NULL,
               vehicle_id TEXT NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
@@ -60,7 +60,7 @@ class AppDatabase extends GeneratedDatabase {
               updated_at INTEGER NOT NULL
             )
           ''');
-          await customStatement('''
+      await customStatement('''
             CREATE TABLE service_items (
               id TEXT PRIMARY KEY NOT NULL,
               service_event_id TEXT NOT NULL REFERENCES service_events(id) ON DELETE CASCADE,
@@ -69,7 +69,7 @@ class AppDatabase extends GeneratedDatabase {
               comment TEXT
             )
           ''');
-          await customStatement('''
+      await customStatement('''
             CREATE TABLE maintenance_schedules (
               id TEXT PRIMARY KEY NOT NULL,
               vehicle_id TEXT NOT NULL REFERENCES vehicles(id) ON DELETE CASCADE,
@@ -84,19 +84,19 @@ class AppDatabase extends GeneratedDatabase {
               UNIQUE(vehicle_id, maintenance_type)
             )
           ''');
-          await customStatement(
-            'CREATE INDEX idx_events_vehicle_date '
-            'ON service_events(vehicle_id, service_date DESC)',
-          );
-          await customStatement(
-            'CREATE INDEX idx_mileage_vehicle_date '
-            'ON mileage_records(vehicle_id, recorded_at DESC)',
-          );
-        },
-        beforeOpen: (details) async {
-          await customStatement('PRAGMA foreign_keys = ON');
-        },
+      await customStatement(
+        'CREATE INDEX idx_events_vehicle_date '
+        'ON service_events(vehicle_id, service_date DESC)',
       );
+      await customStatement(
+        'CREATE INDEX idx_mileage_vehicle_date '
+        'ON mileage_records(vehicle_id, recorded_at DESC)',
+      );
+    },
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+    },
+  );
 }
 
 LazyDatabase _openConnection() {

@@ -14,11 +14,12 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(activeVehicleProvider).when(
+    return ref
+        .watch(activeVehicleProvider)
+        .when(
           loading: () => const LoadingView(),
-          error: (error, stackTrace) => ErrorView(
-            onRetry: () => ref.invalidate(activeVehicleProvider),
-          ),
+          error: (error, stackTrace) =>
+              ErrorView(onRetry: () => ref.invalidate(activeVehicleProvider)),
           data: (vehicle) => vehicle == null
               ? const LoadingView()
               : _DashboardBody(vehicle: vehicle),
@@ -93,60 +94,55 @@ class _VehicleHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Container(
-                width: 54,
-                height: 54,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(17),
-                ),
-                child: Icon(
-                  Icons.directions_car_rounded,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      vehicle.displayName,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                    ),
-                    Text('${vehicle.year}'),
-                    const SizedBox(height: 8),
-                    Text(
-                      formatMileage(context, vehicle.currentMileage),
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-              IconButton.filledTonal(
-                onPressed: () => context.push('/mileage/update'),
-                icon: const Icon(Icons.edit_road_outlined),
-                tooltip: context.l10n.text('updateMileage'),
-              ),
-            ],
+    child: Padding(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        children: [
+          Container(
+            width: 54,
+            height: 54,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(17),
+            ),
+            child: Icon(
+              Icons.directions_car_rounded,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
           ),
-        ),
-      );
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  vehicle.displayName,
+                  style: Theme.of(context).textTheme.titleLarge
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                Text('${vehicle.year}'),
+                const SizedBox(height: 8),
+                Text(
+                  formatMileage(context, vehicle.currentMileage),
+                  style: Theme.of(context).textTheme.headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+          ),
+          IconButton.filledTonal(
+            onPressed: () => context.push('/mileage/update'),
+            icon: const Icon(Icons.edit_road_outlined),
+            tooltip: context.l10n.text('updateMileage'),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class _UpcomingCard extends StatelessWidget {
-  const _UpcomingCard({
-    required this.schedules,
-    required this.currentMileage,
-  });
+  const _UpcomingCard({required this.schedules, required this.currentMileage});
 
   final List<MaintenanceSchedule> schedules;
   final int currentMileage;
@@ -198,16 +194,14 @@ class _DueTile extends StatelessWidget {
     if (remainingKm != null) {
       details.add(
         remainingKm < 0
-            ? context.l10n.text(
-                'overdueKm',
-                {'distance': formatNumber(context, remainingKm.abs())},
-              )
+            ? context.l10n.text('overdueKm', {
+                'distance': formatNumber(context, remainingKm.abs()),
+              })
             : remainingKm == 0
-                ? context.l10n.text('dueNow')
-                : context.l10n.text(
-                    'remainingKm',
-                    {'distance': formatNumber(context, remainingKm)},
-                  ),
+            ? context.l10n.text('dueNow')
+            : context.l10n.text('remainingKm', {
+                'distance': formatNumber(context, remainingKm),
+              }),
       );
     }
     final nextDate = due.schedule.nextDate;
@@ -296,12 +290,12 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Text(
-        title.toUpperCase(),
-        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-              letterSpacing: 0.7,
-            ),
-      );
+    title.toUpperCase(),
+    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+      color: Theme.of(context).colorScheme.onSurfaceVariant,
+      letterSpacing: 0.7,
+    ),
+  );
 }
 
 class _EmptyCard extends StatelessWidget {
@@ -312,17 +306,17 @@ class _EmptyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Row(
-            children: [
-              Icon(icon, color: Theme.of(context).colorScheme.outline),
-              const SizedBox(width: 14),
-              Expanded(child: Text(text)),
-            ],
-          ),
-        ),
-      );
+    child: Padding(
+      padding: const EdgeInsets.all(24),
+      child: Row(
+        children: [
+          Icon(icon, color: Theme.of(context).colorScheme.outline),
+          const SizedBox(width: 14),
+          Expanded(child: Text(text)),
+        ],
+      ),
+    ),
+  );
 }
 
 class _SectionLoading extends StatelessWidget {
@@ -330,11 +324,11 @@ class _SectionLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const Card(
-        child: Padding(
-          padding: EdgeInsets.all(28),
-          child: Center(child: CircularProgressIndicator()),
-        ),
-      );
+    child: Padding(
+      padding: EdgeInsets.all(28),
+      child: Center(child: CircularProgressIndicator()),
+    ),
+  );
 }
 
 class _InlineError extends StatelessWidget {
@@ -344,14 +338,10 @@ class _InlineError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-        child: ListTile(
-          leading: const Icon(Icons.error_outline),
-          title: Text(context.l10n.text('databaseError')),
-          trailing: IconButton(
-            onPressed: onRetry,
-            icon: const Icon(Icons.refresh),
-          ),
-        ),
-      );
+    child: ListTile(
+      leading: const Icon(Icons.error_outline),
+      title: Text(context.l10n.text('databaseError')),
+      trailing: IconButton(onPressed: onRetry, icon: const Icon(Icons.refresh)),
+    ),
+  );
 }
-

@@ -13,11 +13,12 @@ class VehicleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(activeVehicleProvider).when(
+    return ref
+        .watch(activeVehicleProvider)
+        .when(
           loading: () => const LoadingView(),
-          error: (error, stackTrace) => ErrorView(
-            onRetry: () => ref.invalidate(activeVehicleProvider),
-          ),
+          error: (error, stackTrace) =>
+              ErrorView(onRetry: () => ref.invalidate(activeVehicleProvider)),
           data: (vehicle) => vehicle == null
               ? const LoadingView()
               : _VehicleBody(vehicle: vehicle),
@@ -32,79 +33,75 @@ class _VehicleBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(context.l10n.text('vehicle')),
-          actions: [
-            IconButton(
-              onPressed: () => context.push('/settings'),
-              icon: const Icon(Icons.settings_outlined),
-            ),
-          ],
+    appBar: AppBar(
+      title: Text(context.l10n.text('vehicle')),
+      actions: [
+        IconButton(
+          onPressed: () => context.push('/settings'),
+          icon: const Icon(Icons.settings_outlined),
         ),
-        body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(22),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 36,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primaryContainer,
-                      child: const Icon(Icons.directions_car, size: 34),
-                    ),
-                    const SizedBox(height: 14),
-                    Text(
-                      vehicle.displayName,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                    ),
-                  ],
+      ],
+    ),
+    body: ListView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+      children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(22),
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 36,
+                  backgroundColor: Theme.of(context)
+                      .colorScheme
+                      .primaryContainer,
+                  child: const Icon(Icons.directions_car, size: 34),
                 ),
-              ),
+                const SizedBox(height: 14),
+                Text(
+                  vehicle.displayName,
+                  style: Theme.of(context).textTheme.headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            Card(
-              child: Column(
-                children: [
-                  _DetailTile(
-                    label: context.l10n.text('brand'),
-                    value: vehicle.brand,
-                  ),
-                  _DetailTile(
-                    label: context.l10n.text('model'),
-                    value: vehicle.model,
-                  ),
-                  _DetailTile(
-                    label: context.l10n.text('year'),
-                    value: '${vehicle.year}',
-                  ),
-                  _DetailTile(
-                    label: context.l10n.text('currentMileage'),
-                    value: formatMileage(context, vehicle.currentMileage),
-                    onTap: () => context.push('/mileage/update'),
-                  ),
-                  _DetailTile(
-                    label: context.l10n.text('createdAt'),
-                    value: formatDate(context, vehicle.createdAt),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
-      );
+        const SizedBox(height: 16),
+        Card(
+          child: Column(
+            children: [
+              _DetailTile(
+                label: context.l10n.text('brand'),
+                value: vehicle.brand,
+              ),
+              _DetailTile(
+                label: context.l10n.text('model'),
+                value: vehicle.model,
+              ),
+              _DetailTile(
+                label: context.l10n.text('year'),
+                value: '${vehicle.year}',
+              ),
+              _DetailTile(
+                label: context.l10n.text('currentMileage'),
+                value: formatMileage(context, vehicle.currentMileage),
+                onTap: () => context.push('/mileage/update'),
+              ),
+              _DetailTile(
+                label: context.l10n.text('createdAt'),
+                value: formatDate(context, vehicle.createdAt),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class _DetailTile extends StatelessWidget {
-  const _DetailTile({
-    required this.label,
-    required this.value,
-    this.onTap,
-  });
+  const _DetailTile({required this.label, required this.value, this.onTap});
 
   final String label;
   final String value;
@@ -112,16 +109,15 @@ class _DetailTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListTile(
-        title: Text(label),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
-            if (onTap != null) const SizedBox(width: 4),
-            if (onTap != null) const Icon(Icons.chevron_right),
-          ],
-        ),
-        onTap: onTap,
-      );
+    title: Text(label),
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
+        if (onTap != null) const SizedBox(width: 4),
+        if (onTap != null) const Icon(Icons.chevron_right),
+      ],
+    ),
+    onTap: onTap,
+  );
 }
-

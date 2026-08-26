@@ -67,8 +67,8 @@ class _ThemeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => RadioListTile<ThemeMode>(
-        value: mode,
-        secondary: Icon(icon),
-        title: Text(label),
-      );
+    value: mode,
+    secondary: Icon(icon),
+    title: Text(label),
+  );
 }

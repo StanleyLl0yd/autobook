@@ -26,7 +26,6 @@ final serviceEventsProvider = StreamProvider.family<List<ServiceEvent>, String>(
 
 final maintenanceSchedulesProvider =
     StreamProvider.family<List<MaintenanceSchedule>, String>(
-  (ref, vehicleId) =>
-      ref.watch(repositoryProvider).watchMaintenanceSchedules(vehicleId),
-);
-
+      (ref, vehicleId) =>
+          ref.watch(repositoryProvider).watchMaintenanceSchedules(vehicleId),
+    );

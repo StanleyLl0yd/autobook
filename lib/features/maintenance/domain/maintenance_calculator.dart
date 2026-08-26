@@ -72,9 +72,11 @@ abstract final class MaintenanceCalculator {
         ? null
         : schedule.nextDate!.difference(normalizedToday).inDays;
 
-    final isOverdue = (remainingKm != null && remainingKm <= 0) ||
+    final isOverdue =
+        (remainingKm != null && remainingKm <= 0) ||
         (remainingDays != null && remainingDays <= 0);
-    final isSoon = (remainingKm != null && remainingKm <= soonKm) ||
+    final isSoon =
+        (remainingKm != null && remainingKm <= soonKm) ||
         (remainingDays != null && remainingDays <= soonDays);
 
     return MaintenanceDue(
@@ -84,14 +86,12 @@ abstract final class MaintenanceCalculator {
       urgency: isOverdue
           ? MaintenanceUrgency.overdue
           : isSoon
-              ? MaintenanceUrgency.soon
-              : MaintenanceUrgency.normal,
+          ? MaintenanceUrgency.soon
+          : MaintenanceUrgency.normal,
     );
   }
 
-  static List<MaintenanceDue> sortDue(
-    Iterable<MaintenanceDue> values,
-  ) {
+  static List<MaintenanceDue> sortDue(Iterable<MaintenanceDue> values) {
     final result = values.toList();
     result.sort((left, right) {
       final urgency = right.urgency.index.compareTo(left.urgency.index);
@@ -107,4 +107,3 @@ abstract final class MaintenanceCalculator {
     return result;
   }
 }
-

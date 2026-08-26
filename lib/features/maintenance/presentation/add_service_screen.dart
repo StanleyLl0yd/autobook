@@ -15,7 +15,9 @@ class AddServiceScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(activeVehicleProvider).when(
+    return ref
+        .watch(activeVehicleProvider)
+        .when(
           loading: () => const Scaffold(body: LoadingView()),
           error: (error, stackTrace) => Scaffold(
             body: ErrorView(
@@ -71,173 +73,171 @@ class _AddServiceFormState extends ConsumerState<_AddServiceForm> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(context.l10n.text('newService'))),
-        body: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+    appBar: AppBar(title: Text(context.l10n.text('newService'))),
+    body: Form(
+      key: _formKey,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        children: [
+          Text(
+            widget.vehicle.displayName,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 18),
+          SegmentedButton<ServiceCategory>(
+            segments: [
+              ButtonSegment(
+                value: ServiceCategory.maintenance,
+                label: Text(context.l10n.text('maintenance')),
+                icon: const Icon(Icons.build_outlined),
+              ),
+              ButtonSegment(
+                value: ServiceCategory.repair,
+                label: Text(context.l10n.text('repair')),
+                icon: const Icon(Icons.handyman_outlined),
+              ),
+            ],
+            selected: {_category},
+            onSelectionChanged: (values) {
+              setState(() => _category = values.single);
+            },
+          ),
+          const SizedBox(height: 18),
+          Row(
             children: [
-              Text(
-                widget.vehicle.displayName,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 18),
-              SegmentedButton<ServiceCategory>(
-                segments: [
-                  ButtonSegment(
-                    value: ServiceCategory.maintenance,
-                    label: Text(context.l10n.text('maintenance')),
-                    icon: const Icon(Icons.build_outlined),
+              Expanded(
+                child: TextFormField(
+                  controller: _mileage,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    labelText: context.l10n.text('currentMileage'),
+                    suffixText: context.l10n.text('kilometresShort'),
                   ),
-                  ButtonSegment(
-                    value: ServiceCategory.repair,
-                    label: Text(context.l10n.text('repair')),
-                    icon: const Icon(Icons.handyman_outlined),
-                  ),
-                ],
-                selected: {_category},
-                onSelectionChanged: (values) {
-                  setState(() => _category = values.single);
-                },
-              ),
-              const SizedBox(height: 18),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _mileage,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
-                        labelText: context.l10n.text('currentMileage'),
-                        suffixText: context.l10n.text('kilometresShort'),
-                      ),
-                      validator: _requiredNumber,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: _pickDate,
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          labelText: context.l10n.text('date'),
-                        ),
-                        child: Text(formatDate(context, _date)),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Text(
-                context.l10n.text('whatWasDone'),
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-              ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 4,
-                children: [
-                  for (final type in MaintenanceType.values)
-                    FilterChip(
-                      selected: _selected.contains(type),
-                      label: Text(context.l10n.text(type.localizationKey)),
-                      onSelected: (selected) => _toggleType(type, selected),
-                    ),
-                ],
-              ),
-              if (_submitted && _selected.isEmpty) ...[
-                const SizedBox(height: 6),
-                Text(
-                  context.l10n.text('selectAtLeastOne'),
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ],
-              const SizedBox(height: 22),
-              TextFormField(
-                controller: _cost,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: InputDecoration(
-                  labelText: context.l10n.text('totalCost'),
-                  suffixText: context.l10n.text('rublesShort'),
+                  validator: _requiredNumber,
                 ),
               ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _location,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  labelText:
-                      '${context.l10n.text('serviceLocation')} '
-                      '(${context.l10n.text('optional')})',
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _comment,
-                textCapitalization: TextCapitalization.sentences,
-                minLines: 2,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  labelText:
-                      '${context.l10n.text('comment')} '
-                      '(${context.l10n.text('optional')})',
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                context.l10n.text('nextInterval'),
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+              const SizedBox(width: 12),
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: _pickDate,
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: context.l10n.text('date'),
                     ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _intervalKm,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
-                        labelText: context.l10n.text('intervalKm'),
-                        suffixText: context.l10n.text('kilometresShort'),
-                      ),
-                    ),
+                    child: Text(formatDate(context, _date)),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _intervalMonths,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
-                        labelText: context.l10n.text('intervalMonths'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 28),
-              FilledButton.icon(
-                onPressed: _saving ? null : _submit,
-                icon: _saving
-                    ? const SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.check),
-                label: Text(context.l10n.text('save')),
+                ),
               ),
             ],
           ),
-        ),
-      );
+          const SizedBox(height: 24),
+          Text(
+            context.l10n.text('whatWasDone'),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              for (final type in MaintenanceType.values)
+                FilterChip(
+                  selected: _selected.contains(type),
+                  label: Text(context.l10n.text(type.localizationKey)),
+                  onSelected: (selected) => _toggleType(type, selected),
+                ),
+            ],
+          ),
+          if (_submitted && _selected.isEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              context.l10n.text('selectAtLeastOne'),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ],
+          const SizedBox(height: 22),
+          TextFormField(
+            controller: _cost,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            decoration: InputDecoration(
+              labelText: context.l10n.text('totalCost'),
+              suffixText: context.l10n.text('rublesShort'),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _location,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              labelText:
+                  '${context.l10n.text('serviceLocation')} '
+                  '(${context.l10n.text('optional')})',
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _comment,
+            textCapitalization: TextCapitalization.sentences,
+            minLines: 2,
+            maxLines: 4,
+            decoration: InputDecoration(
+              labelText:
+                  '${context.l10n.text('comment')} '
+                  '(${context.l10n.text('optional')})',
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            context.l10n.text('nextInterval'),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _intervalKm,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    labelText: context.l10n.text('intervalKm'),
+                    suffixText: context.l10n.text('kilometresShort'),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextFormField(
+                  controller: _intervalMonths,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    labelText: context.l10n.text('intervalMonths'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 28),
+          FilledButton.icon(
+            onPressed: _saving ? null : _submit,
+            icon: _saving
+                ? const SizedBox.square(
+                    dimension: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.check),
+            label: Text(context.l10n.text('save')),
+          ),
+        ],
+      ),
+    ),
+  );
 
   void _toggleType(MaintenanceType type, bool selected) {
     setState(() {
@@ -281,7 +281,9 @@ class _AddServiceFormState extends ConsumerState<_AddServiceForm> {
     final intervalMonths = int.tryParse(_intervalMonths.text);
     final mileage = int.parse(_mileage.text);
     try {
-      await ref.read(repositoryProvider).addServiceEvent(
+      await ref
+          .read(repositoryProvider)
+          .addServiceEvent(
             NewServiceEvent(
               vehicleId: widget.vehicle.id,
               category: _category,
@@ -304,9 +306,9 @@ class _AddServiceFormState extends ConsumerState<_AddServiceForm> {
       if (mounted) context.pop();
     } on Exception {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.text('saveFailed'))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.text('saveFailed'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }

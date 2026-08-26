@@ -34,10 +34,7 @@ void main() {
         date: DateTime(2026, 8, 25),
         mileage: 97420,
         totalCost: 10550,
-        types: const [
-          MaintenanceType.engineOil,
-          MaintenanceType.oilFilter,
-        ],
+        types: const [MaintenanceType.engineOil, MaintenanceType.oilFilter],
         intervalKm: 10000,
         intervalMonths: 12,
       ),
@@ -56,28 +53,30 @@ void main() {
     expect(schedules.first.nextDate, DateTime(2027, 8, 25));
   });
 
-  test('service mileage advances vehicle mileage but never lowers it', () async {
-    final vehicle = await repository.addVehicle(
-      const NewVehicle(
-        brand: 'Kia',
-        model: 'Sportage',
-        year: 2021,
-        currentMileage: 100000,
-      ),
-    );
+  test(
+    'service mileage advances vehicle mileage but never lowers it',
+    () async {
+      final vehicle = await repository.addVehicle(
+        const NewVehicle(
+          brand: 'Kia',
+          model: 'Sportage',
+          year: 2021,
+          currentMileage: 100000,
+        ),
+      );
 
-    await repository.addServiceEvent(
-      NewServiceEvent(
-        vehicleId: vehicle.id,
-        category: ServiceCategory.repair,
-        date: DateTime(2026, 8, 1),
-        mileage: 90000,
-        totalCost: 1000,
-        types: const [MaintenanceType.other],
-      ),
-    );
+      await repository.addServiceEvent(
+        NewServiceEvent(
+          vehicleId: vehicle.id,
+          category: ServiceCategory.repair,
+          date: DateTime(2026, 8, 1),
+          mileage: 90000,
+          totalCost: 1000,
+          types: const [MaintenanceType.other],
+        ),
+      );
 
-    expect((await repository.getActiveVehicle())?.currentMileage, 100000);
-  });
+      expect((await repository.getActiveVehicle())?.currentMileage, 100000);
+    },
+  );
 }
-

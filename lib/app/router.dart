@@ -14,14 +14,10 @@ final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     initialLocation: '/',
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const AppEntryScreen(),
-      ),
+      GoRoute(path: '/', builder: (context, state) => const AppEntryScreen()),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => ShellScaffold(
-          navigationShell: navigationShell,
-        ),
+        builder: (context, state, navigationShell) =>
+            ShellScaffold(navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
             routes: [
@@ -74,4 +70,3 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.onDispose(router.dispose);
   return router;
 });
-

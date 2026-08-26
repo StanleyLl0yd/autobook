@@ -14,7 +14,9 @@ class UpdateMileageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(activeVehicleProvider).when(
+    return ref
+        .watch(activeVehicleProvider)
+        .when(
           loading: () => const Scaffold(body: LoadingView()),
           error: (error, stackTrace) => Scaffold(
             body: ErrorView(
@@ -34,8 +36,7 @@ class _UpdateMileageForm extends ConsumerStatefulWidget {
   final Vehicle vehicle;
 
   @override
-  ConsumerState<_UpdateMileageForm> createState() =>
-      _UpdateMileageFormState();
+  ConsumerState<_UpdateMileageForm> createState() => _UpdateMileageFormState();
 }
 
 class _UpdateMileageFormState extends ConsumerState<_UpdateMileageForm> {
@@ -56,29 +57,29 @@ class _UpdateMileageFormState extends ConsumerState<_UpdateMileageForm> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(context.l10n.text('updateMileage'))),
-        body: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            TextField(
-              controller: _mileage,
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                labelText: context.l10n.text('newMileage'),
-                suffixText: context.l10n.text('kilometresShort'),
-              ),
-              onSubmitted: (_) => _submit(),
-            ),
-            const SizedBox(height: 20),
-            FilledButton(
-              onPressed: _saving ? null : _submit,
-              child: Text(context.l10n.text('save')),
-            ),
-          ],
+    appBar: AppBar(title: Text(context.l10n.text('updateMileage'))),
+    body: ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        TextField(
+          controller: _mileage,
+          autofocus: true,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: InputDecoration(
+            labelText: context.l10n.text('newMileage'),
+            suffixText: context.l10n.text('kilometresShort'),
+          ),
+          onSubmitted: (_) => _submit(),
         ),
-      );
+        const SizedBox(height: 20),
+        FilledButton(
+          onPressed: _saving ? null : _submit,
+          child: Text(context.l10n.text('save')),
+        ),
+      ],
+    ),
+  );
 
   Future<void> _submit() async {
     final value = int.tryParse(_mileage.text);
@@ -110,10 +111,9 @@ class _UpdateMileageFormState extends ConsumerState<_UpdateMileageForm> {
     }
     setState(() => _saving = true);
     try {
-      await ref.read(repositoryProvider).updateMileage(
-            vehicleId: widget.vehicle.id,
-            mileage: value,
-          );
+      await ref
+          .read(repositoryProvider)
+          .updateMileage(vehicleId: widget.vehicle.id, mileage: value);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(context.l10n.text('mileageUpdated'))),
@@ -121,9 +121,9 @@ class _UpdateMileageFormState extends ConsumerState<_UpdateMileageForm> {
       context.pop();
     } on Exception {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.text('saveFailed'))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.text('saveFailed'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }

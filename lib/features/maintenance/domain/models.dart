@@ -21,42 +21,42 @@ enum MaintenanceType {
 
 extension MaintenanceTypeDetails on MaintenanceType {
   String get storageKey => switch (this) {
-        MaintenanceType.engineOil => 'engine_oil',
-        MaintenanceType.oilFilter => 'oil_filter',
-        MaintenanceType.airFilter => 'air_filter',
-        MaintenanceType.cabinFilter => 'cabin_filter',
-        MaintenanceType.sparkPlugs => 'spark_plugs',
-        MaintenanceType.brakeFluid => 'brake_fluid',
-        MaintenanceType.coolant => 'coolant',
-        MaintenanceType.frontBrakePads => 'front_brake_pads',
-        MaintenanceType.rearBrakePads => 'rear_brake_pads',
-        MaintenanceType.timingBelt => 'timing_belt',
-        MaintenanceType.timingChain => 'timing_chain',
-        MaintenanceType.battery => 'battery',
-        MaintenanceType.transmissionOil => 'transmission_oil',
-        MaintenanceType.tires => 'tires',
-        MaintenanceType.wipers => 'wipers',
-        MaintenanceType.other => 'other',
-      };
+    MaintenanceType.engineOil => 'engine_oil',
+    MaintenanceType.oilFilter => 'oil_filter',
+    MaintenanceType.airFilter => 'air_filter',
+    MaintenanceType.cabinFilter => 'cabin_filter',
+    MaintenanceType.sparkPlugs => 'spark_plugs',
+    MaintenanceType.brakeFluid => 'brake_fluid',
+    MaintenanceType.coolant => 'coolant',
+    MaintenanceType.frontBrakePads => 'front_brake_pads',
+    MaintenanceType.rearBrakePads => 'rear_brake_pads',
+    MaintenanceType.timingBelt => 'timing_belt',
+    MaintenanceType.timingChain => 'timing_chain',
+    MaintenanceType.battery => 'battery',
+    MaintenanceType.transmissionOil => 'transmission_oil',
+    MaintenanceType.tires => 'tires',
+    MaintenanceType.wipers => 'wipers',
+    MaintenanceType.other => 'other',
+  };
 
   String get localizationKey => switch (this) {
-        MaintenanceType.engineOil => 'engineOil',
-        MaintenanceType.oilFilter => 'oilFilter',
-        MaintenanceType.airFilter => 'airFilter',
-        MaintenanceType.cabinFilter => 'cabinFilter',
-        MaintenanceType.sparkPlugs => 'sparkPlugs',
-        MaintenanceType.brakeFluid => 'brakeFluid',
-        MaintenanceType.coolant => 'coolant',
-        MaintenanceType.frontBrakePads => 'frontBrakePads',
-        MaintenanceType.rearBrakePads => 'rearBrakePads',
-        MaintenanceType.timingBelt => 'timingBelt',
-        MaintenanceType.timingChain => 'timingChain',
-        MaintenanceType.battery => 'battery',
-        MaintenanceType.transmissionOil => 'transmissionOil',
-        MaintenanceType.tires => 'tires',
-        MaintenanceType.wipers => 'wipers',
-        MaintenanceType.other => 'other',
-      };
+    MaintenanceType.engineOil => 'engineOil',
+    MaintenanceType.oilFilter => 'oilFilter',
+    MaintenanceType.airFilter => 'airFilter',
+    MaintenanceType.cabinFilter => 'cabinFilter',
+    MaintenanceType.sparkPlugs => 'sparkPlugs',
+    MaintenanceType.brakeFluid => 'brakeFluid',
+    MaintenanceType.coolant => 'coolant',
+    MaintenanceType.frontBrakePads => 'frontBrakePads',
+    MaintenanceType.rearBrakePads => 'rearBrakePads',
+    MaintenanceType.timingBelt => 'timingBelt',
+    MaintenanceType.timingChain => 'timingChain',
+    MaintenanceType.battery => 'battery',
+    MaintenanceType.transmissionOil => 'transmissionOil',
+    MaintenanceType.tires => 'tires',
+    MaintenanceType.wipers => 'wipers',
+    MaintenanceType.other => 'other',
+  };
 
   static MaintenanceType fromStorageKey(String key) {
     return MaintenanceType.values.firstWhere(
@@ -93,15 +93,15 @@ class Vehicle {
   }
 
   Vehicle copyWith({int? currentMileage, DateTime? updatedAt}) => Vehicle(
-        id: id,
-        brand: brand,
-        model: model,
-        year: year,
-        currentMileage: currentMileage ?? this.currentMileage,
-        nickname: nickname,
-        createdAt: createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+    id: id,
+    brand: brand,
+    model: model,
+    year: year,
+    currentMileage: currentMileage ?? this.currentMileage,
+    nickname: nickname,
+    createdAt: createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 }
 
 class MileageRecord {
@@ -161,9 +161,8 @@ class ServiceEvent {
   final DateTime createdAt;
   final List<ServiceItem> items;
 
-  String get fallbackTitle => category == ServiceCategory.maintenance
-      ? 'maintenance'
-      : 'repair';
+  String get fallbackTitle =>
+      category == ServiceCategory.maintenance ? 'maintenance' : 'repair';
 }
 
 class MaintenanceSchedule {
@@ -233,4 +232,3 @@ class NewServiceEvent {
   final int? intervalKm;
   final int? intervalMonths;
 }
-

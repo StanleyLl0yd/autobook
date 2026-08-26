@@ -11,7 +11,9 @@ class AppEntryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(activeVehicleProvider).when(
+    return ref
+        .watch(activeVehicleProvider)
+        .when(
           loading: () => const Scaffold(body: LoadingView()),
           error: (error, stackTrace) => Scaffold(
             body: ErrorView(
@@ -28,4 +30,3 @@ class AppEntryScreen extends ConsumerWidget {
         );
   }
 }
-

@@ -20,8 +20,7 @@ class AutoBookRepository {
 
   Stream<List<MaintenanceSchedule>> watchMaintenanceSchedules(
     String vehicleId,
-  ) =>
-      _watch(() => getMaintenanceSchedules(vehicleId));
+  ) => _watch(() => getMaintenanceSchedules(vehicleId));
 
   Stream<T> _watch<T>(Future<T> Function() query) async* {
     yield await query();
@@ -176,10 +175,12 @@ class AutoBookRepository {
         }
       }
 
-      final current = await _database.customSelect(
-        'SELECT current_mileage FROM vehicles WHERE id = ?',
-        variables: [Variable.withString(input.vehicleId)],
-      ).getSingle();
+      final current = await _database
+          .customSelect(
+            'SELECT current_mileage FROM vehicles WHERE id = ?',
+            variables: [Variable.withString(input.vehicleId)],
+          )
+          .getSingle();
       if (input.mileage > current.read<int>('current_mileage')) {
         await _database.customUpdate(
           'UPDATE vehicles SET current_mileage = ?, updated_at = ? WHERE id = ?',
@@ -240,25 +241,29 @@ class AutoBookRepository {
   }
 
   Future<List<ServiceEvent>> getServiceEvents(String vehicleId) async {
-    final eventRows = await _database.customSelect(
-      '''
+    final eventRows = await _database
+        .customSelect(
+          '''
         SELECT * FROM service_events
         WHERE vehicle_id = ?
         ORDER BY service_date DESC, created_at DESC
       ''',
-      variables: [Variable.withString(vehicleId)],
-    ).get();
+          variables: [Variable.withString(vehicleId)],
+        )
+        .get();
     final result = <ServiceEvent>[];
     for (final row in eventRows) {
       final eventId = row.read<String>('id');
-      final itemRows = await _database.customSelect(
-        '''
+      final itemRows = await _database
+          .customSelect(
+            '''
           SELECT * FROM service_items
           WHERE service_event_id = ?
           ORDER BY rowid ASC
         ''',
-        variables: [Variable.withString(eventId)],
-      ).get();
+            variables: [Variable.withString(eventId)],
+          )
+          .get();
       result.add(_serviceEventFromRow(row, itemRows));
     }
     return result;
@@ -267,13 +272,15 @@ class AutoBookRepository {
   Future<List<MaintenanceSchedule>> getMaintenanceSchedules(
     String vehicleId,
   ) async {
-    final rows = await _database.customSelect(
-      '''
+    final rows = await _database
+        .customSelect(
+          '''
         SELECT * FROM maintenance_schedules
         WHERE vehicle_id = ? AND enabled = 1
       ''',
-      variables: [Variable.withString(vehicleId)],
-    ).get();
+          variables: [Variable.withString(vehicleId)],
+        )
+        .get();
     return rows.map(_scheduleFromRow).toList();
   }
 
@@ -284,20 +291,17 @@ class AutoBookRepository {
   Future<void> dispose() => _changes.close();
 
   Vehicle _vehicleFromRow(QueryRow row) => Vehicle(
-        id: row.read<String>('id'),
-        brand: row.read<String>('brand'),
-        model: row.read<String>('model'),
-        year: row.read<int>('year'),
-        currentMileage: row.read<int>('current_mileage'),
-        nickname: row.readNullable<String>('nickname'),
-        createdAt: _date(row.read<int>('created_at')),
-        updatedAt: _date(row.read<int>('updated_at')),
-      );
+    id: row.read<String>('id'),
+    brand: row.read<String>('brand'),
+    model: row.read<String>('model'),
+    year: row.read<int>('year'),
+    currentMileage: row.read<int>('current_mileage'),
+    nickname: row.readNullable<String>('nickname'),
+    createdAt: _date(row.read<int>('created_at')),
+    updatedAt: _date(row.read<int>('updated_at')),
+  );
 
-  ServiceEvent _serviceEventFromRow(
-    QueryRow row,
-    List<QueryRow> itemRows,
-  ) =>
+  ServiceEvent _serviceEventFromRow(QueryRow row, List<QueryRow> itemRows) =>
       ServiceEvent(
         id: row.read<String>('id'),
         vehicleId: row.read<String>('vehicle_id'),
@@ -328,19 +332,19 @@ class AutoBookRepository {
       );
 
   MaintenanceSchedule _scheduleFromRow(QueryRow row) => MaintenanceSchedule(
-        id: row.read<String>('id'),
-        vehicleId: row.read<String>('vehicle_id'),
-        type: MaintenanceTypeDetails.fromStorageKey(
-          row.read<String>('maintenance_type'),
-        ),
-        intervalKm: row.readNullable<int>('interval_km'),
-        intervalMonths: row.readNullable<int>('interval_months'),
-        lastServiceDate: _date(row.read<int>('last_service_date')),
-        lastServiceMileage: row.read<int>('last_service_mileage'),
-        nextDate: _nullableDate(row.readNullable<int>('next_date')),
-        nextMileage: row.readNullable<int>('next_mileage'),
-        enabled: row.read<int>('enabled') == 1,
-      );
+    id: row.read<String>('id'),
+    vehicleId: row.read<String>('vehicle_id'),
+    type: MaintenanceTypeDetails.fromStorageKey(
+      row.read<String>('maintenance_type'),
+    ),
+    intervalKm: row.readNullable<int>('interval_km'),
+    intervalMonths: row.readNullable<int>('interval_months'),
+    lastServiceDate: _date(row.read<int>('last_service_date')),
+    lastServiceMileage: row.read<int>('last_service_mileage'),
+    nextDate: _nullableDate(row.readNullable<int>('next_date')),
+    nextMileage: row.readNullable<int>('next_mileage'),
+    enabled: row.read<int>('enabled') == 1,
+  );
 
   DateTime _date(int milliseconds) =>
       DateTime.fromMillisecondsSinceEpoch(milliseconds);
@@ -353,4 +357,3 @@ class AutoBookRepository {
     return trimmed == null || trimmed.isEmpty ? null : trimmed;
   }
 }
-

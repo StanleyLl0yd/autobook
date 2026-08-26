@@ -52,9 +52,8 @@ class _AddVehicleScreenState extends ConsumerState<AddVehicleScreen> {
                     const SizedBox(height: 24),
                     Text(
                       context.l10n.text('welcomeHeadline'),
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.w700),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
@@ -91,7 +90,9 @@ class _AddVehicleScreenState extends ConsumerState<AddVehicleScreen> {
                             controller: _year,
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.next,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                             decoration: InputDecoration(
                               labelText: context.l10n.text('year'),
                             ),
@@ -104,7 +105,9 @@ class _AddVehicleScreenState extends ConsumerState<AddVehicleScreen> {
                           child: TextFormField(
                             controller: _mileage,
                             keyboardType: TextInputType.number,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                             decoration: InputDecoration(
                               labelText: context.l10n.text('currentMileage'),
                               suffixText: context.l10n.text('kilometresShort'),
@@ -159,7 +162,9 @@ class _AddVehicleScreenState extends ConsumerState<AddVehicleScreen> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     setState(() => _saving = true);
     try {
-      await ref.read(repositoryProvider).addVehicle(
+      await ref
+          .read(repositoryProvider)
+          .addVehicle(
             NewVehicle(
               brand: _brand.text,
               model: _model.text,
@@ -174,9 +179,9 @@ class _AddVehicleScreenState extends ConsumerState<AddVehicleScreen> {
       context.go('/dashboard');
     } on Exception {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.text('saveFailed'))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.text('saveFailed'))));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
