@@ -19,7 +19,7 @@ permissions:
 
 concurrency:
   group: release-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   release:
@@ -121,7 +121,7 @@ jobs:
           report="$RUNNER_TEMP/apksigner-report.txt"
           "$apksigner" verify --verbose --print-certs "$source_apk" | tee "$report"
           actual_fingerprint="$(
-            awk -F': ' '/Signer #1 certificate SHA-256 digest:/ {print $2; exit}' "$report" |
+            awk -F': ' '/certificate SHA-256 digest:/ {print $2; exit}' "$report" |
               tr -d ':' |
               tr '[:upper:]' '[:lower:]'
           )"
