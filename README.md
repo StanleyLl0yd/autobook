@@ -36,8 +36,27 @@ No backend, authorization, telemetry, AI, OCR, GPS, OBD, advertising, or marketp
 flutter run
 ```
 
-The verification script creates the Android runner on the first run, resolves
-dependencies, checks formatting and analysis, runs tests, and builds a debug APK.
+The verification script resolves dependencies, checks formatting and analysis,
+runs tests, and builds a debug APK.
+
+## Signed Android releases
+
+Signed APKs are built only by the
+[Android Release workflow](.github/workflows/release.yml). The release keystore
+and passwords are stored as encrypted GitHub Actions secrets and are never
+committed to the repository.
+
+Required repository secrets:
+
+- `ANDROID_KEYSTORE_BASE64`;
+- `ANDROID_KEYSTORE_PASSWORD`;
+- `ANDROID_KEY_ALIAS`;
+- `ANDROID_KEY_PASSWORD`.
+
+The workflow validates formatting and static analysis, runs all tests, builds a
+release APK, verifies its signing-certificate fingerprint, publishes the APK
+and SHA-256 checksum as workflow artifacts, and creates the corresponding
+GitHub Release.
 
 ## Architecture
 
