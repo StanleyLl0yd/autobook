@@ -2,6 +2,8 @@ name: Android Release
 
 on:
   push:
+    branches:
+      - "release/v*"
     tags:
       - "v*"
   workflow_dispatch:
@@ -25,7 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
-      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
       EXPECTED_CERT_SHA256: f02571c40741e2cb071564f5b63fd3dc38a875d0eda11a8c42269ed635bc2a58
 
     steps:
@@ -46,6 +47,22 @@ jobs:
           channel: stable
           flutter-version: 3.47.1
           cache: true
+
+      - name: Resolve release tag
+        id: release_info
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MANUAL_TAG: ${{ inputs.tag }}
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            release_tag="$MANUAL_TAG"
+          elif [[ "$GITHUB_REF_TYPE" == "branch" ]]; then
+            release_tag="${GITHUB_REF_NAME#release/}"
+          else
+            release_tag="$GITHUB_REF_NAME"
+          fi
+          echo "RELEASE_TAG=$release_tag" >> "$GITHUB_ENV"
+          echo "tag=$release_tag" >> "$GITHUB_OUTPUT"
 
       - name: Validate release version
         run: |
@@ -122,7 +139,7 @@ jobs:
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v7
         with:
-          name: AutoBook-${{ env.RELEASE_TAG }}-signed
+          name: AutoBook-${{ steps.release_info.outputs.tag }}-signed
           path: |
             ${{ steps.package.outputs.apk_path }}
             ${{ steps.package.outputs.apk_path }}.sha256
@@ -163,3 +180,12 @@ jobs:
         run: |
           rm -f android/key.properties
           rm -f "$RUNNER_TEMP/autobook-release.jks"
+
+      - name: Remove temporary release branch
+        if: always() && github.ref_type == 'branch' && startsWith(github.ref_name, 'release/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api \
+            --method DELETE \
+            "/repos/$GITHUB_REPOSITORY/git/refs/heads/$GITHUB_REF_NAME"
