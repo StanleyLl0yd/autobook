@@ -10,7 +10,7 @@ if [[ ! -d android ]]; then
   flutter create \
     --empty \
     --platforms=android \
-    --org app.autobook \
+    --org com.silverlightning \
     --project-name autobook \
     .
 fi
