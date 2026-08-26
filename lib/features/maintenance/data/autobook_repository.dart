@@ -7,10 +7,10 @@ import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
 class AutoBookRepository {
-  AutoBookRepository(this._database, {Uuid uuid = const Uuid()}) : _uuid = uuid;
+  AutoBookRepository(this._database, {this.uuid = const Uuid()});
 
   final AppDatabase _database;
-  final Uuid _uuid;
+  final Uuid uuid;
   final _changes = StreamController<void>.broadcast();
 
   Stream<Vehicle?> watchActiveVehicle() => _watch(getActiveVehicle);
@@ -39,8 +39,8 @@ class AutoBookRepository {
   }
 
   Future<Vehicle> addVehicle(NewVehicle input) async {
-    final id = _uuid.v4();
-    final mileageId = _uuid.v4();
+    final id = uuid.v4();
+    final mileageId = uuid.v4();
     final now = DateTime.now();
     await _database.transaction(() async {
       await _database.customInsert(
@@ -107,7 +107,7 @@ class AutoBookRepository {
           VALUES (?, ?, ?, ?)
         ''',
         variables: [
-          Variable.withString(_uuid.v4()),
+          Variable.withString(uuid.v4()),
           Variable.withString(vehicleId),
           Variable.withInt(mileage),
           Variable.withInt(now.millisecondsSinceEpoch),
@@ -121,7 +121,7 @@ class AutoBookRepository {
     if (input.types.isEmpty) {
       throw ArgumentError.value(input.types, 'types', 'Must not be empty');
     }
-    final eventId = _uuid.v4();
+    final eventId = uuid.v4();
     final now = DateTime.now();
     await _database.transaction(() async {
       await _database.customInsert(
@@ -154,7 +154,7 @@ class AutoBookRepository {
             ) VALUES (?, ?, ?, ?, NULL)
           ''',
           variables: [
-            Variable.withString(_uuid.v4()),
+            Variable.withString(uuid.v4()),
             Variable.withString(eventId),
             Variable.withString(type.storageKey),
             Variable.withString(type.storageKey),
@@ -163,7 +163,7 @@ class AutoBookRepository {
 
         if (input.intervalKm != null || input.intervalMonths != null) {
           final schedule = MaintenanceCalculator.scheduleFrom(
-            id: _uuid.v4(),
+            id: uuid.v4(),
             vehicleId: input.vehicleId,
             type: type,
             serviceDate: input.date,
@@ -196,7 +196,7 @@ class AutoBookRepository {
             VALUES (?, ?, ?, ?)
           ''',
           variables: [
-            Variable.withString(_uuid.v4()),
+            Variable.withString(uuid.v4()),
             Variable.withString(input.vehicleId),
             Variable.withInt(input.mileage),
             Variable.withInt(now.millisecondsSinceEpoch),

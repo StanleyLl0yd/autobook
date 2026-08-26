@@ -68,9 +68,7 @@ abstract final class MaintenanceCalculator {
         ? null
         : schedule.nextMileage! - currentMileage;
     final normalizedToday = DateTime(today.year, today.month, today.day);
-    final remainingDays = schedule.nextDate == null
-        ? null
-        : schedule.nextDate!.difference(normalizedToday).inDays;
+    final remainingDays = schedule.nextDate?.difference(normalizedToday).inDays;
 
     final isOverdue =
         (remainingKm != null && remainingKm <= 0) ||

@@ -10,7 +10,7 @@ class AppDatabase extends GeneratedDatabase {
 
   AppDatabase.inMemory() : super(NativeDatabase.memory());
 
-  AppDatabase.forExecutor(QueryExecutor executor) : super(executor);
+  AppDatabase.forExecutor(super.executor);
 
   @override
   int get schemaVersion => 1;
