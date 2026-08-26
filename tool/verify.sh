@@ -8,6 +8,7 @@ fi
 
 if [[ ! -d android ]]; then
   flutter create \
+    --empty \
     --platforms=android \
     --org app.autobook \
     --project-name autobook \

@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -25,8 +25,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
-        with:
-          persist-credentials: false
 
       - name: Set up Java
         uses: actions/setup-java@v6
@@ -40,6 +38,21 @@ jobs:
           channel: stable
           flutter-version: 3.47.1
           cache: true
+
+      - name: Format Dart sources
+        run: dart format lib test
+
+      - name: Commit formatted sources
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if git diff --quiet -- lib test; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib test
+          git commit -m "style: format Dart sources"
+          git push origin HEAD:main
 
       - name: Verify and build
         run: ./tool/verify.sh
