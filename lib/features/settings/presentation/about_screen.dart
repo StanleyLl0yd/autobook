@@ -92,9 +92,9 @@ class AboutScreen extends StatelessWidget {
   Future<void> _copyRepository(BuildContext context) async {
     await Clipboard.setData(const ClipboardData(text: AppInfo.repositoryUrl));
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.text('linkCopied'))),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(context.l10n.text('linkCopied'))));
   }
 }
 
@@ -110,9 +110,6 @@ class _AboutTile extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) => ListTile(
-    leading: Icon(icon),
-    title: Text(label),
-    subtitle: Text(value),
-  );
+  Widget build(BuildContext context) =>
+      ListTile(leading: Icon(icon), title: Text(label), subtitle: Text(value));
 }

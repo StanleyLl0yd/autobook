@@ -31,16 +31,13 @@ void main() {
         version.read<int>('user_version'),
         AppDatabase.currentSchemaVersion,
       );
-      expect(
-        tables.map((row) => row.read<String>('name')),
-        [
-          'maintenance_schedules',
-          'mileage_records',
-          'service_events',
-          'service_items',
-          'vehicles',
-        ],
-      );
+      expect(tables.map((row) => row.read<String>('name')), [
+        'maintenance_schedules',
+        'mileage_records',
+        'service_events',
+        'service_items',
+        'vehicles',
+      ]);
     } finally {
       await database.close();
     }
@@ -66,10 +63,7 @@ void main() {
           date: DateTime(2026, 8, 25),
           mileage: 97420,
           totalCost: 10550,
-          types: const [
-            MaintenanceType.engineOil,
-            MaintenanceType.oilFilter,
-          ],
+          types: const [MaintenanceType.engineOil, MaintenanceType.oilFilter],
           intervalKm: 10000,
           intervalMonths: 12,
         ),

@@ -15,9 +15,7 @@ void main() {
   });
 
   test('release publication stays explicit and immutable', () {
-    final workflow = File(
-      '.github/workflows/release.yml',
-    ).readAsStringSync();
+    final workflow = File('.github/workflows/release.yml').readAsStringSync();
 
     expect(workflow, contains('workflow_dispatch:'));
     expect(workflow, contains('Refuse an existing release or tag'));

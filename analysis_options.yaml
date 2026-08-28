@@ -3,6 +3,12 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   errors:
     invalid_use_of_protected_member: error
 
@@ -11,4 +17,3 @@ linter:
     avoid_print: true
     prefer_final_locals: true
     use_super_parameters: true
-

@@ -6,8 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('application constants match pubspec version', () {
     final pubspec = File('pubspec.yaml').readAsStringSync();
-    final match = RegExp(r'^version:\s*([^+]+)\+(\d+)$', multiLine: true)
-        .firstMatch(pubspec);
+    final match = RegExp(
+      r'^version:\s*([^+]+)\+(\d+)$',
+      multiLine: true,
+    ).firstMatch(pubspec);
 
     expect(match, isNotNull);
     expect(match?.group(1), AppInfo.version);
