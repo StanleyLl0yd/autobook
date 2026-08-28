@@ -5,6 +5,11 @@
 .packages
 build/
 coverage/
+release/
+*.apk
+*.aab
+*.idsig
+*.sqlite*
 
 # Android local and signing files
 android/.gradle/
@@ -18,4 +23,3 @@ android/key.properties
 .vscode/
 *.iml
 .DS_Store
-
