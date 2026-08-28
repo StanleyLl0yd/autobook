@@ -69,7 +69,7 @@ void main() {
         ),
       );
 
-      await database.customDelete(
+      await database.customUpdate(
         'DELETE FROM vehicles WHERE id = ?',
         variables: [Variable.withString(vehicle.id)],
       );
@@ -131,7 +131,7 @@ void main() {
 }
 
 class _FutureSchemaDatabase extends AppDatabase {
-  _FutureSchemaDatabase(QueryExecutor executor) : super.forExecutor(executor);
+  _FutureSchemaDatabase(super.executor) : super.forExecutor();
 
   @override
   int get schemaVersion => AppDatabase.currentSchemaVersion + 1;
