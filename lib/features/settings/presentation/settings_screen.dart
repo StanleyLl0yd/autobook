@@ -2,6 +2,7 @@ import 'package:autobook/app/app.dart';
 import 'package:autobook/core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -46,6 +47,21 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            context.l10n.text('information').toUpperCase(),
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          const SizedBox(height: 8),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text(context.l10n.text('about')),
+              subtitle: Text(context.l10n.text('aboutShortDescription')),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/about'),
             ),
           ),
         ],

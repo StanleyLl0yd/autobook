@@ -4,6 +4,7 @@ import 'package:autobook/features/expenses/presentation/expenses_screen.dart';
 import 'package:autobook/features/history/presentation/history_screen.dart';
 import 'package:autobook/features/maintenance/presentation/add_service_screen.dart';
 import 'package:autobook/features/mileage/presentation/update_mileage_screen.dart';
+import 'package:autobook/features/settings/presentation/about_screen.dart';
 import 'package:autobook/features/settings/presentation/settings_screen.dart';
 import 'package:autobook/features/vehicles/presentation/app_entry_screen.dart';
 import 'package:autobook/features/vehicles/presentation/vehicle_screen.dart';
@@ -64,6 +65,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/about',
+        builder: (context, state) => const AboutScreen(),
       ),
     ],
   );

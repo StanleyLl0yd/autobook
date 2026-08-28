@@ -1,7 +1,7 @@
 name: autobook
 description: A local-first digital service history for personal vehicles.
 publish_to: none
-version: 0.1.0+1
+version: 0.1.1+2
 
 environment:
   sdk: ">=3.12.0 <4.0.0"
@@ -27,5 +27,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/branding/autobook-icon-master.png
     - lib/l10n/app_en.arb
     - lib/l10n/app_ru.arb

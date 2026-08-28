@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 abstract final class AppTheme {
   static const _seed = Color(0xFF246BFD);
@@ -11,6 +12,7 @@ abstract final class AppTheme {
       seedColor: _seed,
       brightness: brightness,
     );
+    final dark = brightness == Brightness.dark;
 
     return ThemeData(
       useMaterial3: true,
@@ -34,6 +36,17 @@ abstract final class AppTheme {
         elevation: 0,
         backgroundColor: colorScheme.surfaceContainerLowest,
         indicatorColor: colorScheme.primaryContainer,
+      ),
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: dark ? Brightness.light : Brightness.dark,
+          statusBarBrightness: dark ? Brightness.dark : Brightness.light,
+          systemNavigationBarColor: colorScheme.surfaceContainerLowest,
+          systemNavigationBarIconBrightness: dark
+              ? Brightness.light
+              : Brightness.dark,
+        ),
       ),
     );
   }
