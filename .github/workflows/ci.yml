@@ -63,6 +63,12 @@ jobs:
             echo "keyPassword=android"
           } > android/key.properties
 
+      - name: Check generated files and formatting
+        run: |
+          flutter pub get
+          dart format lib test
+          git diff --exit-code -- analysis_options.yaml lib test
+
       - name: Verify project
         run: ./tool/verify.sh
 
