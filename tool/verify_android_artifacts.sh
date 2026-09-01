@@ -19,7 +19,7 @@ for artifact in "$apk" "$aab" "$BUNDLETOOL_JAR"; do
 done
 
 build_tools_dir="$(
-  find "$ANDROID_HOME/build-tools" -type f -name aapt -print |
+  find "$ANDROID_HOME/build-tools" \( -type f -o -type l \) -name aapt -print |
     sed 's#/aapt$##' |
     sort -V |
     tail -n 1
@@ -28,16 +28,22 @@ aapt="$build_tools_dir/aapt"
 zipalign="$build_tools_dir/zipalign"
 readelf="$(
   find "$ANDROID_HOME/ndk/28.2.13676358/toolchains/llvm/prebuilt" \
-    -type f -name llvm-readelf -print |
+    \( -type f -o -type l \) -name llvm-readelf -print |
     head -n 1
 )"
 
-for tool in "$aapt" "$zipalign" "$readelf"; do
-  if [[ ! -x "$tool" ]]; then
-    echo "Required Android tool is unavailable: $tool" >&2
+require_executable() {
+  local name="$1"
+  local path="$2"
+  if [[ ! -x "$path" ]]; then
+    echo "Required Android tool is unavailable: $name ($path)" >&2
     exit 127
   fi
-done
+}
+
+require_executable aapt "$aapt"
+require_executable zipalign "$zipalign"
+require_executable llvm-readelf "$readelf"
 
 badging="$("$aapt" dump badging "$apk")"
 grep -F "package: name='com.sl.autobook'" <<< "$badging" > /dev/null

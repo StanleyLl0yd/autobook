@@ -69,6 +69,7 @@ void main() {
     expect(settings, contains('version "9.1.1"'));
     expect(setup, contains('cmdline-tools/latest/bin/sdkmanager'));
     expect(setup, contains('platforms;android-37.0'));
+    expect(setup, contains('cmake;3.22.1'));
     expect(setup, contains('bundletool_version="1.18.3"'));
     expect(setup, contains('bundletool-all-\$bundletool_version.jar'));
     expect(

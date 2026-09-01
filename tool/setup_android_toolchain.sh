@@ -16,7 +16,8 @@ fi
 "$sdkmanager" --sdk_root="$ANDROID_HOME" --install \
   "platforms;android-37.0" \
   "build-tools;36.0.0" \
-  "ndk;28.2.13676358"
+  "ndk;28.2.13676358" \
+  "cmake;3.22.1"
 
 bundletool_version="1.18.3"
 bundletool_sha256="a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29"
