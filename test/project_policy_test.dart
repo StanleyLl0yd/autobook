@@ -48,4 +48,48 @@ void main() {
     expect(verify, contains('--org com.sl'));
     expect(activity, contains('package com.sl.autobook'));
   });
+
+  test('Android release targets current Google Play requirements', () {
+    final build = File('android/app/build.gradle.kts').readAsStringSync();
+    final settings = File('android/settings.gradle.kts').readAsStringSync();
+    final ci = File('.github/workflows/ci.yml').readAsStringSync();
+    final release = File('.github/workflows/release.yml').readAsStringSync();
+    final setup = File('tool/setup_android_toolchain.sh').readAsStringSync();
+    final artifacts = File(
+      'tool/verify_android_artifacts.sh',
+    ).readAsStringSync();
+
+    expect(build, contains('compileSdk = 37'));
+    expect(build, contains('minSdk = 26'));
+    expect(build, contains('targetSdk = 36'));
+    expect(build, contains('ndkVersion = "28.2.13676358"'));
+    for (final abi in ['armeabi-v7a', 'arm64-v8a', 'x86_64']) {
+      expect(build, contains('"$abi"'));
+    }
+    expect(settings, contains('version "9.1.1"'));
+    expect(setup, contains('cmdline-tools/latest/bin/sdkmanager'));
+    expect(setup, contains('platforms;android-37.0'));
+    expect(setup, contains('cmake;3.22.1'));
+    expect(setup, contains('bundletool_version="1.18.3"'));
+    expect(setup, contains('bundletool-all-\$bundletool_version.jar'));
+    expect(
+      setup,
+      contains(
+        'a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29',
+      ),
+    );
+    expect(artifacts, contains("sdkVersion:'26'"));
+    expect(artifacts, contains("targetSdkVersion:'36'"));
+    expect(artifacts, contains('PAGE_ALIGNMENT_16K'));
+    expect(artifacts, contains('zipalign" -c -P 16'));
+    for (final workflow in [ci, release]) {
+      expect(workflow, contains('bundletool-all-1.18.3.jar'));
+      expect(workflow, contains('./tool/setup_android_toolchain.sh'));
+      expect(workflow, contains('./tool/verify_android_artifacts.sh'));
+      expect(
+        workflow.indexOf('flutter build appbundle --release'),
+        lessThan(workflow.indexOf('flutter build apk --release')),
+      );
+    }
+  });
 }

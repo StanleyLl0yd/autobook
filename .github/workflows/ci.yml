@@ -42,6 +42,11 @@ jobs:
           flutter-version: 3.47.1
           cache: true
 
+      - name: Set up Android toolchain
+        env:
+          BUNDLETOOL_JAR: ${{ runner.temp }}/bundletool-all-1.18.3.jar
+        run: ./tool/setup_android_toolchain.sh
+
       - name: Configure temporary CI signing
         run: |
           set -euo pipefail
@@ -72,17 +77,18 @@ jobs:
       - name: Verify project
         run: ./tool/verify.sh
 
-      - name: Build release verification artifacts
+      - name: Build release AAB and APK
         run: |
-          flutter build apk --release
           flutter build appbundle --release
-          aapt="$(find "$ANDROID_HOME/build-tools" -type f -name aapt -print | sort -V | tail -n 1)"
-          test -n "$aapt"
-          application_id="$(
-            "$aapt" dump badging build/app/outputs/flutter-apk/app-release.apk |
-              sed -n "s/^package: name='\([^']*\)'.*/\1/p"
-          )"
-          test "$application_id" = "com.sl.autobook"
+          flutter build apk --release
+
+      - name: Verify Android release artifacts
+        env:
+          BUNDLETOOL_JAR: ${{ runner.temp }}/bundletool-all-1.18.3.jar
+        run: |
+          ./tool/verify_android_artifacts.sh \
+            build/app/outputs/flutter-apk/app-release.apk \
+            build/app/outputs/bundle/release/app-release.aab
 
       - name: Upload debug APK
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -97,8 +103,8 @@ jobs:
         with:
           name: autobook-ci-release-${{ github.sha }}
           path: |
-            build/app/outputs/flutter-apk/app-release.apk
             build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 14
 

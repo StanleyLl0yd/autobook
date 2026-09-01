@@ -6,6 +6,8 @@ if ! command -v flutter >/dev/null 2>&1; then
   exit 127
 fi
 
+bash -n tool/*.sh
+
 if [[ ! -d android ]]; then
   flutter create \
     --empty \

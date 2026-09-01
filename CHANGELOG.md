@@ -17,6 +17,9 @@ All notable changes to AutoBook will be documented in this file.
 ### Changed
 
 - Android application identifier is now `com.sl.autobook`.
+- Android now requires API 26, compiles with API 37, and targets API 36.
+- The signed AAB is the primary Play artifact; the APK remains available for direct installation.
+- Release native code is limited to Flutter's supported ARM32, ARM64, and x86-64 ABIs and built with NDK r28.
 - Release APK and AAB builds now use R8 minification and resource shrinking.
 - CI verifies debug, release APK, and release AAB builds with an ephemeral key.
 - Release validation, signing, and publication are isolated into least-privilege jobs.
@@ -28,6 +31,7 @@ All notable changes to AutoBook will be documented in this file.
 - Android cloud backup and device-to-device transfer are disabled for local records.
 - Release publication is immutable and refuses existing tags or releases.
 - APK Signature Schemes v2 and v3, signer count, and APK/AAB certificate fingerprints are verified.
+- CI verifies every native library and both release formats for 16 KB page-size compatibility.
 - Gradle distribution downloads are protected by the official SHA-256 checksum.
 - Database upgrades fail closed when an explicit migration is missing.
 
