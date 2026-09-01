@@ -22,8 +22,6 @@ jobs:
     timeout-minutes: 40
     permissions:
       contents: read
-    env:
-      BUNDLETOOL_JAR: ${{ runner.temp }}/bundletool-all-1.18.3.jar
 
     steps:
       - name: Check out repository
@@ -45,6 +43,8 @@ jobs:
           cache: true
 
       - name: Set up Android toolchain
+        env:
+          BUNDLETOOL_JAR: ${{ runner.temp }}/bundletool-all-1.18.3.jar
         run: ./tool/setup_android_toolchain.sh
 
       - name: Configure temporary CI signing
@@ -83,6 +83,8 @@ jobs:
           flutter build apk --release
 
       - name: Verify Android release artifacts
+        env:
+          BUNDLETOOL_JAR: ${{ runner.temp }}/bundletool-all-1.18.3.jar
         run: |
           ./tool/verify_android_artifacts.sh \
             build/app/outputs/flutter-apk/app-release.apk \

@@ -64,7 +64,6 @@ jobs:
     env:
       RELEASE_TAG: ${{ inputs.tag }}
       EXPECTED_CERT_SHA256: f02571c40741e2cb071564f5b63fd3dc38a875d0eda11a8c42269ed635bc2a58
-      BUNDLETOOL_JAR: ${{ runner.temp }}/bundletool-all-1.18.3.jar
 
     steps:
       - name: Check out repository
@@ -86,6 +85,8 @@ jobs:
           cache: true
 
       - name: Set up Android toolchain
+        env:
+          BUNDLETOOL_JAR: ${{ runner.temp }}/bundletool-all-1.18.3.jar
         run: ./tool/setup_android_toolchain.sh
 
       - name: Configure release signing
@@ -136,6 +137,7 @@ jobs:
       - name: Verify and package release artifacts
         id: package
         env:
+          BUNDLETOOL_JAR: ${{ runner.temp }}/bundletool-all-1.18.3.jar
           LC_ALL: C.UTF-8
         run: |
           set -euo pipefail
