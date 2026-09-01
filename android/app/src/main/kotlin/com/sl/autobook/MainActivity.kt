@@ -1,4 +1,4 @@
-package com.silverlightning.autobook
+package com.sl.autobook
 
 import io.flutter.embedding.android.FlutterActivity
 

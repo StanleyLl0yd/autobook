@@ -76,6 +76,13 @@ jobs:
         run: |
           flutter build apk --release
           flutter build appbundle --release
+          aapt="$(find "$ANDROID_HOME/build-tools" -type f -name aapt -print | sort -V | tail -n 1)"
+          test -n "$aapt"
+          application_id="$(
+            "$aapt" dump badging build/app/outputs/flutter-apk/app-release.apk |
+              sed -n "s/^package: name='\([^']*\)'.*/\1/p"
+          )"
+          test "$application_id" = "com.sl.autobook"
 
       - name: Upload debug APK
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

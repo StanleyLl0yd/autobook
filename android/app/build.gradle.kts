@@ -27,7 +27,7 @@ if (isReleaseBuild && !keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.silverlightning.autobook"
+    namespace = "com.sl.autobook"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -51,7 +51,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.silverlightning.autobook"
+        applicationId = "com.sl.autobook"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

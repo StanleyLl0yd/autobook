@@ -63,6 +63,7 @@ jobs:
       contents: read
     env:
       RELEASE_TAG: ${{ inputs.tag }}
+      EXPECTED_APPLICATION_ID: com.sl.autobook
       EXPECTED_CERT_SHA256: f02571c40741e2cb071564f5b63fd3dc38a875d0eda11a8c42269ed635bc2a58
 
     steps:
@@ -142,6 +143,17 @@ jobs:
 
           apksigner="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner -print | sort -V | tail -n 1)"
           test -n "$apksigner"
+          aapt="$(dirname "$apksigner")/aapt"
+          test -x "$aapt"
+
+          actual_application_id="$(
+            "$aapt" dump badging "$source_apk" |
+              sed -n "s/^package: name='\([^']*\)'.*/\1/p"
+          )"
+          if [[ "$actual_application_id" != "$EXPECTED_APPLICATION_ID" ]]; then
+            echo "APK application ID does not match $EXPECTED_APPLICATION_ID." >&2
+            exit 1
+          fi
 
           report="$RUNNER_TEMP/apksigner-report.txt"
           "$apksigner" verify --verbose --print-certs "$source_apk" | tee "$report"

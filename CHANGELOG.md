@@ -4,7 +4,7 @@
 
 All notable changes to AutoBook will be documented in this file.
 
-## [0.1.1] - 2026-08-28
+## [0.1.1] - 2026-09-01
 
 ### Added
 
@@ -16,6 +16,7 @@ All notable changes to AutoBook will be documented in this file.
 
 ### Changed
 
+- Android application identifier is now `com.sl.autobook`.
 - Release APK and AAB builds now use R8 minification and resource shrinking.
 - CI verifies debug, release APK, and release AAB builds with an ephemeral key.
 - Release validation, signing, and publication are isolated into least-privilege jobs.
@@ -29,6 +30,12 @@ All notable changes to AutoBook will be documented in this file.
 - APK Signature Schemes v2 and v3, signer count, and APK/AAB certificate fingerprints are verified.
 - Gradle distribution downloads are protected by the official SHA-256 checksum.
 - Database upgrades fail closed when an explicit migration is missing.
+
+### Upgrade note
+
+- Android treats `com.sl.autobook` as a separate application from the `v0.1.0`
+  prototype (`com.silverlightning.autobook`). Installations and local records
+  from `v0.1.0` are not upgraded or transferred automatically.
 
 ## [0.1.0] - 2026-08-26
 

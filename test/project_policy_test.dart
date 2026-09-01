@@ -34,4 +34,18 @@ void main() {
 
     expect(checksum, isNotNull);
   });
+
+  test('Android package identifier is stable', () {
+    final build = File('android/app/build.gradle.kts').readAsStringSync();
+    final verify = File('tool/verify.sh').readAsStringSync();
+    final activity = File(
+      'android/app/src/main/kotlin/com/sl/autobook/MainActivity.kt',
+    ).readAsStringSync();
+
+    expect(build, contains('namespace = "com.sl.autobook"'));
+    expect(build, contains('applicationId = "com.sl.autobook"'));
+    expect(build, isNot(contains('com.silverlightning')));
+    expect(verify, contains('--org com.sl'));
+    expect(activity, contains('package com.sl.autobook'));
+  });
 }
