@@ -32,8 +32,9 @@ The `0.1.1` source release includes:
 
 Download the signed APK from the
 [latest GitHub Release](https://github.com/StanleyLl0yd/autobook/releases/latest).
-Releases from `v0.1.1` also include an Android App Bundle and a shared SHA-256
-checksum file.
+The signed Android App Bundle is the primary Google Play artifact; the APK is
+an additional universal package for direct installation. Releases from
+`v0.1.1` include both files and a shared SHA-256 checksum file.
 
 Android may ask you to allow installation from your browser or file manager.
 Only install assets published in this repository and compare their checksums
@@ -57,7 +58,8 @@ Requirements:
 - Flutter 3.47.1;
 - Dart 3.12 or newer;
 - JDK 17;
-- an Android toolchain configured for Flutter.
+- Android SDK 37 with target API 36 and minimum API 26;
+- Android NDK 28.2.13676358.
 
 Run the complete local verification:
 
@@ -68,7 +70,8 @@ Run the complete local verification:
 The script resolves dependencies, checks formatting, runs static analysis and
 tests, and builds a debug APK. GitHub CI additionally creates R8-minified,
 resource-shrunk release APK and AAB verification artifacts with an ephemeral
-CI key.
+CI key. It verifies the exact SDK levels and Flutter ABIs, every packaged native
+library, 16 KB ELF/ZIP alignment, and the AAB page-alignment configuration.
 
 ## Architecture
 
@@ -87,6 +90,7 @@ expense summaries, so an event cannot be counted twice.
 
 - [ADR-0001: Prototype architecture](docs/adr/0001-prototype-v0.1.md)
 - [ADR-0002: v0.1.1 hardening](docs/adr/0002-v0.1.1-hardening.md)
+- [ADR-0003: Google Play readiness](docs/adr/0003-google-play-readiness.md)
 
 ## Release integrity
 
@@ -99,10 +103,12 @@ The workflow:
 
 1. requires a `vMAJOR.MINOR.PATCH` tag matching `pubspec.yaml`;
 2. runs formatting, analysis, and tests;
-3. builds an R8-minified APK and AAB with the protected release key;
-4. verifies APK Signature Schemes v2 and v3, one APK signer, and the expected
+3. builds the signed R8-minified AAB first and an additional universal APK;
+4. verifies API 26/36/37 configuration, `armeabi-v7a`, `arm64-v8a`, and
+   `x86_64`, plus 16 KB compatibility for every native library and package;
+5. verifies APK Signature Schemes v2 and v3, one APK signer, and the expected
    certificate fingerprint for both APK and AAB;
-5. generates SHA-256 checksums and publishes a new immutable GitHub Release.
+6. generates SHA-256 checksums and publishes a new immutable GitHub Release.
 
 Signing material is supplied through the protected `release` environment and
 GitHub Actions secrets, then removed from the runner. Existing tags and
