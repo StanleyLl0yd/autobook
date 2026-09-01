@@ -69,7 +69,8 @@ void main() {
     expect(settings, contains('version "9.1.1"'));
     expect(setup, contains('cmdline-tools/latest/bin/sdkmanager'));
     expect(setup, contains('platforms;android-37.0'));
-    expect(setup, contains('bundletool-all-1.18.3.jar'));
+    expect(setup, contains('bundletool_version="1.18.3"'));
+    expect(setup, contains('bundletool-all-\$bundletool_version.jar'));
     expect(
       setup,
       contains(
@@ -81,6 +82,7 @@ void main() {
     expect(artifacts, contains('PAGE_ALIGNMENT_16K'));
     expect(artifacts, contains('zipalign" -c -P 16'));
     for (final workflow in [ci, release]) {
+      expect(workflow, contains('bundletool-all-1.18.3.jar'));
       expect(workflow, contains('./tool/setup_android_toolchain.sh'));
       expect(workflow, contains('./tool/verify_android_artifacts.sh'));
       expect(
