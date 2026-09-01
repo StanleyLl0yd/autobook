@@ -67,6 +67,7 @@ void main() {
       expect(build, contains('"$abi"'));
     }
     expect(settings, contains('version "9.1.1"'));
+    expect(setup, contains('cmdline-tools/latest/bin/sdkmanager'));
     expect(setup, contains('platforms;android-37.0'));
     expect(setup, contains('bundletool-all-1.18.3.jar'));
     expect(

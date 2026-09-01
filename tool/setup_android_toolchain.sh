@@ -4,7 +4,10 @@ set -euo pipefail
 : "${ANDROID_HOME:?ANDROID_HOME is required}"
 : "${BUNDLETOOL_JAR:?BUNDLETOOL_JAR is required}"
 
-sdkmanager="$(command -v sdkmanager || true)"
+sdkmanager="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+if [[ ! -x "$sdkmanager" ]]; then
+  sdkmanager="$(command -v sdkmanager || true)"
+fi
 if [[ -z "$sdkmanager" ]]; then
   echo "Android sdkmanager is required." >&2
   exit 127
